@@ -11,6 +11,7 @@ import static com.yazlab.proje.Sabitler.balonGenisligi;
 import static com.yazlab.proje.Sabitler.balonYuksekligi;
 import static com.yazlab.proje.Sabitler.ekranYuksekligi;
 
+// Deneme commit
 public class BalonKirmizi extends Actor {
     public Texture texture;
     public float hiz;
