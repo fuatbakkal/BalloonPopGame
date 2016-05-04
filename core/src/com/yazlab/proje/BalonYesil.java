@@ -6,10 +6,12 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 import static com.yazlab.proje.Sabitler.balonGenisligi;
 import static com.yazlab.proje.Sabitler.balonYuksekligi;
 import static com.yazlab.proje.Sabitler.ekranGenisligi;
+import static com.yazlab.proje.Sabitler.puan;
 
 public class BalonYesil extends Actor {
     public Texture texture;
@@ -25,10 +27,12 @@ public class BalonYesil extends Actor {
         baslangicX = MathUtils.random(0, ekranGenisligi - balonGenisligi);
         setX(baslangicX);
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
+        setTouchable(Touchable.enabled);
 
         // Balon patlatılırsa ekrandan kaldır ve puan ekle
         addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                puan += 5;
                 return remove();
             }
         });
