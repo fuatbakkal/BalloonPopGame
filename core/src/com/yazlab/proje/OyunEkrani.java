@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-
-import static com.yazlab.proje.Sabitler.ekranGenisligi;
-import static com.yazlab.proje.Sabitler.ekranYuksekligi;
-import static com.yazlab.proje.Sabitler.puan;
+import static com.yazlab.proje.Sabitler.*;
 
 public class OyunEkrani implements Screen {
     private final Oyun oyun;
@@ -20,17 +17,22 @@ public class OyunEkrani implements Screen {
     private float gecenSure;
     private float sureAraligi;
     private int kalanSure;
+    private boolean durdurulduMu;
     private Tema tema;
+    private Label puanYazisiLabel;
     private Label puanLabel;
     private Label kalanSureLabel;
     private Label sureLabel;
     private Sound patlamaSesi;
     private Stage stage;
-    private BalonKirmizi kirmiziBalon;
-    private BalonYesil yesilBalon;
 
     public OyunEkrani(final Oyun oyun) {
         puan = 0;
+        patlatilanKirmizi = 0;
+        patlatilanSari = 0;
+        patlatilanYesil = 0;
+        patlatilanSiyah = 0;
+        this.durdurulduMu = false;
         this.oyun = oyun;
         this.stage = new Stage();
         this.tema = new Tema();
@@ -40,15 +42,23 @@ public class OyunEkrani implements Screen {
         this.gecenSure = 0f;
         this.sureAraligi = 1.0f;
 
+        Gdx.graphics.setContinuousRendering(false); //Sadece oyun durdurulana kadar render et
+        Gdx.graphics.requestRendering();
         Gdx.input.setInputProcessor(stage); //Inputları etkinleştir
         Gdx.input.setCatchBackKey(true); //Sistem "geri" tuşu yerine libgdx "geri" tuşunu kullan
 
-        // "Puan" yazısı
-        puanLabel = new Label("Puan", tema);
-        puanLabel.setX(0);
-        puanLabel.setY(ekranYuksekligi - puanLabel.getHeight());
+        // "Puan" yazısını göster
+        puanYazisiLabel = new Label("Puan", tema);
+        puanYazisiLabel.setX(0);
+        puanYazisiLabel.setY(ekranYuksekligi - puanYazisiLabel.getHeight());
+        stage.addActor(puanYazisiLabel);
 
-        // "Kalan süre" yazısı
+        // Puanı göster
+        puanLabel = new Label("0000", tema);
+        puanLabel.setX(puanYazisiLabel.getWidth() / 4);
+        puanLabel.setY(ekranYuksekligi - puanYazisiLabel.getHeight() * 2);
+
+        // "Kalan süre" yazısını göster
         kalanSureLabel = new Label("Kalan Süre", tema);
         kalanSureLabel.setX(ekranGenisligi - kalanSureLabel.getWidth());
         kalanSureLabel.setY(ekranYuksekligi - kalanSureLabel.getHeight());
@@ -69,6 +79,10 @@ public class OyunEkrani implements Screen {
 
     @Override
     public void render(float delta) {
+        // Oyun durdurulmadıysa render et
+        if (!durdurulduMu) {
+            Gdx.graphics.requestRendering();
+        }
 
         // TODO: 4.05.2016 Arkaplan resmi ekle
         // Arkaplan rengi
@@ -86,41 +100,36 @@ public class OyunEkrani implements Screen {
 
         if (spawnSuresi > spawnAraligi) {
             spawnSuresi -= spawnAraligi;
-
-            // Kırmızı balonları oluştur
-            kirmiziBalon = new BalonKirmizi();
-            stage.addActor(kirmiziBalon);
-
-            // Yeşil balonları oluştur
-            yesilBalon = new BalonYesil();
-            stage.addActor(yesilBalon);
-
-            // FIXME: 4.05.2016 Siyah balonlar
-            /*
-            BalonSiyah siyahBalon = new BalonSiyah();
-            siyahBalon.setTouchable(Touchable.enabled);
-			stage.addActor(siyahBalon);*/
+            stage.addActor(new BalonKirmizi());
+            stage.addActor(new BalonYesil());
+			//stage.addActor(new BalonSiyah());
         }
 
-        puanLabel.setText("Puan: " + puan);
         sureLabel.setText(Integer.toString(kalanSure));
-        stage.addActor(puanLabel);
+        puanLabel.setText(Integer.toString(puan));
         stage.addActor(sureLabel);
+        stage.addActor(puanLabel);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
         // Ekran dışına çıkan balonları oyundan kaldır
-        for (Actor a : stage.getActors()) {
-            if (a.getX() > ekranGenisligi || a.getY() > ekranYuksekligi) {
-                //escaped++;
-                a.remove();
+        for (Actor balon : stage.getActors()) {
+            if (balon.getX() > ekranGenisligi || balon.getY() > ekranYuksekligi) {
+                balon.remove();
             }
         }
 
-        if(kalanSure == 0){
-            dispose();
-            // TODO: 4.05.2016 Bölüm bitince dialog oluştur ve bölüm puanını göster
-            oyun.setScreen(new OyunEkrani(oyun));
+        // Süre dolunca yapılacaklar
+        if(kalanSure == 0) {
+            durdurulduMu = true;
+
+            if(patlatilanKirmizi != 0 && patlatilanSari != 0 && patlatilanYesil != 0 && patlatilanSiyah != 0 && puan >= 100) {
+                oyun.setScreen(new OyunEkrani(oyun));
+            }
+
+            else {
+                dispose();
+            }
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
@@ -145,6 +154,7 @@ public class OyunEkrani implements Screen {
 
     @Override
     public void pause() {
+        //oyun.pause();
     }
 
     @Override

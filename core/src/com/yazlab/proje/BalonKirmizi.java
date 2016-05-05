@@ -7,11 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-
-import static com.yazlab.proje.Sabitler.balonGenisligi;
-import static com.yazlab.proje.Sabitler.balonYuksekligi;
-import static com.yazlab.proje.Sabitler.ekranYuksekligi;
-import static com.yazlab.proje.Sabitler.puan;
+import static com.yazlab.proje.Sabitler.*;
 
 public class BalonKirmizi extends Actor {
     public Texture texture;
@@ -39,6 +35,7 @@ public class BalonKirmizi extends Actor {
         addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 puan += 10;
+                patlatilanKirmizi++;
                 return remove();
             }
         });

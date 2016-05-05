@@ -16,8 +16,8 @@ public class Tema extends Skin {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 64;
         parameter.characters = "abcçdefgğhıijklmnoöpqrsştuüvwxyzABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ0123456789][_!$%#@|\\\\/?-+=()*&.;,{}\\\"´`'<>:";
-        BitmapFont font = generator.generateFont(parameter); // font size 12 pixels
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+        BitmapFont font = generator.generateFont(parameter); // Fontu parametreye göre oluştur
+        generator.dispose();
 
         // Fontu temaya ekle
         add("myFont", font);
