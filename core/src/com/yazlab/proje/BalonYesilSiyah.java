@@ -9,27 +9,41 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import static com.yazlab.proje.Sabitler.*;
 
-public class BalonYesil extends Actor {
+public class BalonYesilSiyah extends Actor {
     public Texture texture;
     public int hiz;
     public int baslangicX;
     public float zaman;
+    private float gecenSure;
+    private float donusumAraligi;
+    private float puanDegeri;
+    private boolean yesilMi;
 
-    public BalonYesil() {
+    public BalonYesilSiyah() {
         super();
-        texture = new Texture("yesil_balon.png");
+        yesilMi = MathUtils.randomBoolean(); //Yeşil ya da Siyah balon
+        donustur();
         zaman = 0;
         hiz = 700;
         baslangicX = MathUtils.random(0, ekranGenisligi - balonGenisligi);
         setX(baslangicX);
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
-        setTouchable(Touchable.enabled);
+        gecenSure = 0f;
+        donusumAraligi = MathUtils.random(0.5f, 2.0f);
+        setTouchable(Touchable.enabled); //Dokunmayı etkinleştir
 
         // Balon patlatılırsa ekrandan kaldır ve puan ekle
         addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                puan += 5;
-                patlatilanYesil++;
+
+                puan += puanDegeri;
+
+                if(yesilMi)
+                    patlatilanYesil++;
+
+                else
+                    patlatilanSiyah++;
+
                 return remove();
             }
         });
@@ -44,5 +58,29 @@ public class BalonYesil extends Actor {
         moveBy(delta, delta);
         zaman += delta;
         setY(hiz * zaman - balonYuksekligi);
+
+        // donusumAraligi süresi sonunda balonu dönüştür
+        gecenSure += delta;
+        if (gecenSure > donusumAraligi) {
+            donustur();
+            gecenSure -= donusumAraligi;
+        }
+    }
+
+    public void donustur() {
+        // Balon yeşilse siyah yap
+        if(yesilMi) {
+            yesilMi = false;
+            texture = new Texture("siyah_balon.png");
+            puanDegeri = -10;
+        }
+
+        // Balon siyahsa yeşil yap
+        else {
+            yesilMi = true;
+            texture = new Texture("yesil_balon.png");
+            puanDegeri = 5;
+
+        }
     }
 }

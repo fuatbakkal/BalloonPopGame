@@ -98,11 +98,11 @@ public class OyunEkrani implements Screen {
             gecenSure -= sureAraligi;
         }
 
+        // Balonları ekrana ekle
         if (spawnSuresi > spawnAraligi) {
             spawnSuresi -= spawnAraligi;
             stage.addActor(new BalonKirmizi());
-            stage.addActor(new BalonYesil());
-			//stage.addActor(new BalonSiyah());
+            stage.addActor(new BalonYesilSiyah());
         }
 
         sureLabel.setText(Integer.toString(kalanSure));
@@ -123,10 +123,12 @@ public class OyunEkrani implements Screen {
         if(kalanSure == 0) {
             durdurulduMu = true;
 
+            // Bölüm geçme koşulu sağlanırsa
             if(patlatilanKirmizi != 0 && patlatilanSari != 0 && patlatilanYesil != 0 && patlatilanSiyah != 0 && puan >= 100) {
                 oyun.setScreen(new OyunEkrani(oyun));
             }
 
+            // Koşul sağlanmazsa
             else {
                 dispose();
             }
