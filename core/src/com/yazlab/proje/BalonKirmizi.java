@@ -7,7 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import static com.yazlab.proje.Sabitler.*;
+
+import static com.yazlab.proje.Sabitler.balonGenisligi;
+import static com.yazlab.proje.Sabitler.balonYuksekligi;
+import static com.yazlab.proje.Sabitler.patlatilanKirmizi;
+import static com.yazlab.proje.Sabitler.puan;
 
 public class BalonKirmizi extends Actor {
     public Texture texture;
@@ -25,8 +29,8 @@ public class BalonKirmizi extends Actor {
         hiz = 320 * MathUtils.random(0.5f, 2.0f);
         genlik = 75 * MathUtils.random(0.5f, 2.0f);
         salinim = 0.01f * MathUtils.random(0.5f, 2.0f);
-        baslangicY = MathUtils.random(0, ekranYuksekligi / balonYuksekligi - 2) * balonYuksekligi;
-        baslangicX = -balonGenisligi * 2;
+        baslangicY = MathUtils.random(.5f, 5f) * balonYuksekligi;
+        baslangicX = -balonGenisligi;
         setX(baslangicX);
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
         setTouchable(Touchable.enabled);

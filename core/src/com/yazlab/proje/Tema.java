@@ -14,7 +14,7 @@ public class Tema extends Skin {
         // Türkçe karakter desteği için FreeType font kullanıldı
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("DejaVuSans.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 64;
+        parameter.size = 48;
         parameter.characters = "abcçdefgğhıijklmnoöpqrsştuüvwxyzABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ0123456789][_!$%#@|\\\\/?-+=()*&.;,{}\\\"´`'<>:";
         BitmapFont font = generator.generateFont(parameter); // Fontu parametreye göre oluştur
         generator.dispose();

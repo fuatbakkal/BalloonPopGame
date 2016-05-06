@@ -7,12 +7,17 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import static com.yazlab.proje.Sabitler.*;
+
+import static com.yazlab.proje.Sabitler.balonGenisligi;
+import static com.yazlab.proje.Sabitler.balonYuksekligi;
+import static com.yazlab.proje.Sabitler.patlatilanSiyah;
+import static com.yazlab.proje.Sabitler.patlatilanYesil;
+import static com.yazlab.proje.Sabitler.puan;
 
 public class BalonYesilSiyah extends Actor {
     public Texture texture;
     public int hiz;
-    public int baslangicX;
+    public float baslangicX;
     public float zaman;
     private float gecenSure;
     private float donusumAraligi;
@@ -25,8 +30,8 @@ public class BalonYesilSiyah extends Actor {
         donustur();
         zaman = 0;
         hiz = 700;
-        baslangicX = MathUtils.random(0, ekranGenisligi - balonGenisligi);
-        setX(baslangicX);
+        baslangicX = MathUtils.random(-0.05f, 3.85f);
+        setX(baslangicX * balonGenisligi);
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
         gecenSure = 0f;
         donusumAraligi = MathUtils.random(0.5f, 2.0f);

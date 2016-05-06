@@ -8,7 +8,15 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import static com.yazlab.proje.Sabitler.*;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+
+import static com.yazlab.proje.Sabitler.ekranGenisligi;
+import static com.yazlab.proje.Sabitler.ekranYuksekligi;
+import static com.yazlab.proje.Sabitler.patlatilanKirmizi;
+import static com.yazlab.proje.Sabitler.patlatilanSari;
+import static com.yazlab.proje.Sabitler.patlatilanSiyah;
+import static com.yazlab.proje.Sabitler.patlatilanYesil;
+import static com.yazlab.proje.Sabitler.puan;
 
 public class OyunEkrani implements Screen {
     private final Oyun oyun;
@@ -34,11 +42,11 @@ public class OyunEkrani implements Screen {
         patlatilanSiyah = 0;
         this.durdurulduMu = false;
         this.oyun = oyun;
-        this.stage = new Stage();
+        this.stage = new Stage(new StretchViewport(ekranGenisligi, ekranYuksekligi));
         this.tema = new Tema();
         this.spawnSuresi = 0f;
         this.spawnAraligi = 0.8f; // Balonların oluşturulma aralığı
-        this.kalanSure = 30; // Oyun süre limiti
+        this.kalanSure = 99999; // Oyun süre limiti
         this.gecenSure = 0f;
         this.sureAraligi = 1.0f;
 

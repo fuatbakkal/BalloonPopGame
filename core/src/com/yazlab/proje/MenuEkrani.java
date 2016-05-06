@@ -9,16 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import static com.yazlab.proje.Sabitler.ekranGenisligi;
 import static com.yazlab.proje.Sabitler.ekranYuksekligi;
 
 public class MenuEkrani implements Screen {
-    private final float BUTON_GENISLIGI = ekranGenisligi - 180f;
-    private final float BUTON_YUKSEKLIGI = 180f;
-    private final float BUTON_ARALIGI = 10f;
-    private final float BUTON_X = (ekranGenisligi - BUTON_GENISLIGI) / 2;
-    final Oyun oyun;
+    private final Oyun oyun;
     private Stage stage;
     private Tema tema;
     private Label yazi;
@@ -29,11 +26,14 @@ public class MenuEkrani implements Screen {
 
     public MenuEkrani(final Oyun oyun) {
         this.oyun = oyun;
-        this.stage = new Stage();
+        this.stage = new Stage(new StretchViewport(ekranGenisligi, ekranYuksekligi));
         this.tema = new Tema();
         Gdx.input.setInputProcessor(stage);
 
-        float currentY = 1000f;
+        final float BUTON_GENISLIGI = ekranGenisligi - 150f;
+        final float BUTON_YUKSEKLIGI = 150f;
+        final float BUTON_ARALIGI = 20f;
+        final float BUTON_X = (ekranGenisligi - BUTON_GENISLIGI) / 2;
 
         // Ekranın üstündeki yazı
         yazi = new Label("YazLab II - Proje 2\nBalon Patlatma Oyunu", tema);
@@ -43,7 +43,7 @@ public class MenuEkrani implements Screen {
         // "Yeni Oyun" butonu
         yeniOyunButonu = new TextButton("Yeni Oyun", tema);
         yeniOyunButonu.setX(BUTON_X);
-        yeniOyunButonu.setY(currentY);
+        yeniOyunButonu.setY(ekranYuksekligi / 2);
         yeniOyunButonu.setWidth(BUTON_GENISLIGI);
         yeniOyunButonu.setHeight(BUTON_YUKSEKLIGI);
         yeniOyunButonu.addListener(new InputListener() {
@@ -57,7 +57,7 @@ public class MenuEkrani implements Screen {
         // "Hakkında" butonu
         hakkindaButonu = new TextButton("Hakkında", tema);
         hakkindaButonu.setX(BUTON_X);
-        hakkindaButonu.setY(currentY - (BUTON_YUKSEKLIGI + BUTON_ARALIGI));
+        hakkindaButonu.setY(ekranYuksekligi / 2 - (BUTON_YUKSEKLIGI + BUTON_ARALIGI));
         hakkindaButonu.setWidth(BUTON_GENISLIGI);
         hakkindaButonu.setHeight(BUTON_YUKSEKLIGI);
 
@@ -70,7 +70,7 @@ public class MenuEkrani implements Screen {
         // "Çıkış" butonu
         cikisButonu = new TextButton("Çıkış", tema);
         cikisButonu.setX(BUTON_X);
-        cikisButonu.setY(currentY - (BUTON_YUKSEKLIGI + BUTON_ARALIGI) * 2);
+        cikisButonu.setY(ekranYuksekligi / 2 - (BUTON_YUKSEKLIGI + BUTON_ARALIGI) * 2);
         cikisButonu.setWidth(BUTON_GENISLIGI);
         cikisButonu.setHeight(BUTON_YUKSEKLIGI);
         cikisButonu.addListener(new InputListener() {
@@ -125,8 +125,7 @@ public class MenuEkrani implements Screen {
 
     @Override
     public void dispose() {
-        //skin.dispose();
-        //stage.dispose();
-        //oyun.dispose();
+        stage.dispose();
+        oyun.dispose();
     }
 }
