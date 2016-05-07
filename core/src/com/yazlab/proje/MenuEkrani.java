@@ -8,30 +8,27 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.yazlab.proje.arkaplanlar.ArkaMenu;
 
-import static com.yazlab.proje.Sabitler.ekranGenisligi;
-import static com.yazlab.proje.Sabitler.ekranYuksekligi;
+import static com.yazlab.proje.sabitler_globaller.Globaller.tema;
+import static com.yazlab.proje.sabitler_globaller.Sabitler.ekranGenisligi;
+import static com.yazlab.proje.sabitler_globaller.Sabitler.ekranYuksekligi;
 
 public class MenuEkrani implements Screen {
     private final Oyun oyun;
     private Stage stage;
-    private Tema tema;
     private Label yazi;
-    private Window pencere;
-    private TextButton yeniOyunButonu;
-    private TextButton hakkindaButonu;
-    private TextButton cikisButonu;
+    private AcilirPencere hakkindaPencere;
+    private TextButton yeniOyunButon, yuksekSkorlarButon, hakkindaButon, cikisButon;
 
     public MenuEkrani(final Oyun oyun) {
         this.oyun = oyun;
         this.stage = new Stage(new StretchViewport(ekranGenisligi, ekranYuksekligi));
-        this.tema = new Tema();
         Gdx.input.setInputProcessor(stage);
 
         final float BUTON_GENISLIGI = ekranGenisligi - 150f;
-        final float BUTON_YUKSEKLIGI = 150f;
+        final float BUTON_YUKSEKLIGI = 90f;
         final float BUTON_ARALIGI = 20f;
         final float BUTON_X = (ekranGenisligi - BUTON_GENISLIGI) / 2;
 
@@ -41,12 +38,12 @@ public class MenuEkrani implements Screen {
         yazi.setY(ekranYuksekligi - 180f);
 
         // "Yeni Oyun" butonu
-        yeniOyunButonu = new TextButton("Yeni Oyun", tema);
-        yeniOyunButonu.setX(BUTON_X);
-        yeniOyunButonu.setY(ekranYuksekligi / 2);
-        yeniOyunButonu.setWidth(BUTON_GENISLIGI);
-        yeniOyunButonu.setHeight(BUTON_YUKSEKLIGI);
-        yeniOyunButonu.addListener(new InputListener() {
+        yeniOyunButon = new TextButton("Yeni Oyun", tema);
+        yeniOyunButon.setX(BUTON_X);
+        yeniOyunButon.setY(ekranYuksekligi / 2);
+        yeniOyunButon.setWidth(BUTON_GENISLIGI);
+        yeniOyunButon.setHeight(BUTON_YUKSEKLIGI);
+        yeniOyunButon.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 oyun.setScreen(new OyunEkrani(oyun));
                 dispose();
@@ -55,47 +52,57 @@ public class MenuEkrani implements Screen {
         });
 
         // "Hakkında" butonu
-        hakkindaButonu = new TextButton("Hakkında", tema);
-        hakkindaButonu.setX(BUTON_X);
-        hakkindaButonu.setY(ekranYuksekligi / 2 - (BUTON_YUKSEKLIGI + BUTON_ARALIGI));
-        hakkindaButonu.setWidth(BUTON_GENISLIGI);
-        hakkindaButonu.setHeight(BUTON_YUKSEKLIGI);
+        hakkindaButon = new TextButton("Hakkında", tema);
+        hakkindaButon.setX(BUTON_X);
+        hakkindaButon.setY(ekranYuksekligi / 2 - (BUTON_YUKSEKLIGI + BUTON_ARALIGI));
+        hakkindaButon.setWidth(BUTON_GENISLIGI);
+        hakkindaButon.setHeight(BUTON_YUKSEKLIGI);
 
         // "Hakkında" penceresi
-        pencere = new Window("Pencere Başlığı", tema);
-        pencere.setSize(320, 640);
-        pencere.setPosition(180, 540);
-        pencere.setKeepWithinStage(true);
+        hakkindaPencere = new AcilirPencere("Hakkında");
+        hakkindaPencere.button("Tamam", new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return hakkindaPencere.remove();
+            }
+        });
+        hakkindaPencere.text("130202087 - Fuat Bakkal\n" +
+                             "130202089 - Mustafa Koç\n" +
+                             "130202025 - Osman Avni Koçoğlu\n" +
+                             "130202077 - Kaan Cörüt");
+        hakkindaPencere.setScale(.88f);
+        //hakkindaPencere.setHeight(ekranYuksekligi/2f);
 
         // "Çıkış" butonu
-        cikisButonu = new TextButton("Çıkış", tema);
-        cikisButonu.setX(BUTON_X);
-        cikisButonu.setY(ekranYuksekligi / 2 - (BUTON_YUKSEKLIGI + BUTON_ARALIGI) * 2);
-        cikisButonu.setWidth(BUTON_GENISLIGI);
-        cikisButonu.setHeight(BUTON_YUKSEKLIGI);
-        cikisButonu.addListener(new InputListener() {
+        cikisButon = new TextButton("Çıkış", tema);
+        cikisButon.setX(BUTON_X);
+        cikisButon.setY(ekranYuksekligi / 2 - (BUTON_YUKSEKLIGI + BUTON_ARALIGI) * 2);
+        cikisButon.setWidth(BUTON_GENISLIGI);
+        cikisButon.setHeight(BUTON_YUKSEKLIGI);
+        cikisButon.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
+                oyun.dispose();
                 Gdx.app.exit();
                 return true;
             }
         });
 
+        stage.addActor(new ArkaMenu());
         stage.addActor(yazi);
-        stage.addActor(yeniOyunButonu);
-        stage.addActor(hakkindaButonu);
-        stage.addActor(cikisButonu);
+        stage.addActor(yeniOyunButon);
+        stage.addActor(hakkindaButon);
+        stage.addActor(cikisButon);
     }
 
     @Override
     public void render(float delta) {
-        // Arkaplan
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
-        hakkindaButonu.addListener(new InputListener() {
+        hakkindaButon.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.addActor(pencere);
+                hakkindaPencere.show(stage);
+                stage.addActor(hakkindaPencere);
                 return true;
             }
         });

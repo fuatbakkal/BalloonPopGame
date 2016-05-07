@@ -1,4 +1,4 @@
-package com.yazlab.proje;
+package com.yazlab.proje.balonlar;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -8,12 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 
-import static com.yazlab.proje.Sabitler.balonGenisligi;
-import static com.yazlab.proje.Sabitler.balonYuksekligi;
-import static com.yazlab.proje.Sabitler.patlatilanKirmizi;
-import static com.yazlab.proje.Sabitler.puan;
+import static com.yazlab.proje.sabitler_globaller.Globaller.patlatilanKirmizi;
+import static com.yazlab.proje.sabitler_globaller.Globaller.puan;
+import static com.yazlab.proje.sabitler_globaller.Sabitler.balonGenisligi;
+import static com.yazlab.proje.sabitler_globaller.Sabitler.balonYuksekligi;
 
-public class BalonKirmizi extends Actor {
+public class KirmiziBalon extends Actor {
     public Texture texture;
     public float hiz;
     public float genlik;
@@ -22,7 +22,7 @@ public class BalonKirmizi extends Actor {
     public int baslangicX;
     public float zaman;
 
-    public BalonKirmizi() {
+    public KirmiziBalon() {
         super();
         zaman = 0;
         texture = new Texture("kirmizi_balon.png");

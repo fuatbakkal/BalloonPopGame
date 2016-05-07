@@ -1,4 +1,4 @@
-package com.yazlab.proje;
+package com.yazlab.proje.balonlar;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -8,13 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 
-import static com.yazlab.proje.Sabitler.balonGenisligi;
-import static com.yazlab.proje.Sabitler.balonYuksekligi;
-import static com.yazlab.proje.Sabitler.patlatilanSiyah;
-import static com.yazlab.proje.Sabitler.patlatilanYesil;
-import static com.yazlab.proje.Sabitler.puan;
+import static com.yazlab.proje.sabitler_globaller.Globaller.patlatilanSiyah;
+import static com.yazlab.proje.sabitler_globaller.Globaller.patlatilanYesil;
+import static com.yazlab.proje.sabitler_globaller.Globaller.puan;
+import static com.yazlab.proje.sabitler_globaller.Sabitler.balonGenisligi;
+import static com.yazlab.proje.sabitler_globaller.Sabitler.balonYuksekligi;
 
-public class BalonYesilSiyah extends Actor {
+public class YesilSiyahBalon extends Actor {
     public Texture texture;
     public int hiz;
     public float baslangicX;
@@ -24,7 +24,7 @@ public class BalonYesilSiyah extends Actor {
     private float puanDegeri;
     private boolean yesilMi;
 
-    public BalonYesilSiyah() {
+    public YesilSiyahBalon() {
         super();
         yesilMi = MathUtils.randomBoolean(); //Yeşil ya da Siyah balon
         donustur();
@@ -40,12 +40,10 @@ public class BalonYesilSiyah extends Actor {
         // Balon patlatılırsa ekrandan kaldır ve puan ekle
         addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
                 puan += puanDegeri;
 
                 if(yesilMi)
                     patlatilanYesil++;
-
                 else
                     patlatilanSiyah++;
 
