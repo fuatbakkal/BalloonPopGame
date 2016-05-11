@@ -11,7 +11,7 @@ public final class ArkaMenu extends Actor {
     public ArkaMenu() {
         super();
         texture = new Texture("arka_menu.png");
-        setPosition(0f, 0f);
+        //setPosition(0f, 0f);
         setTouchable(Touchable.disabled);
     }
 

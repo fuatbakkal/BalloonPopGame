@@ -16,7 +16,7 @@ public final class Tema extends Skin {
 
         // Font üretmek için parametreleri ayarla
         FreeTypeFontParameter parametre = new FreeTypeFontParameter();
-        parametre.size = 48;
+        parametre.size = 40;
         parametre.characters = "abcçdefgğhıijklmnoöpqrsştuüvwxyzABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ0123456789][_!$%#@|\\\\/?-+=()*&.;,{}\\\"´`'<>:";
 
         // Fontu parametreye göre üret

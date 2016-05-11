@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.yazlab.proje.balonlar.KirmiziBalon;
+import com.yazlab.proje.balonlar.SariBalon;
 import com.yazlab.proje.balonlar.YesilSiyahBalon;
 
 import static com.yazlab.proje.sabitler_globaller.Globaller.keypressed;
@@ -24,9 +25,13 @@ import static com.yazlab.proje.sabitler_globaller.Globaller.puan;
 import static com.yazlab.proje.sabitler_globaller.Globaller.tema;
 import static com.yazlab.proje.sabitler_globaller.Sabitler.ekranGenisligi;
 import static com.yazlab.proje.sabitler_globaller.Sabitler.ekranYuksekligi;
+import static com.yazlab.proje.sabitler_globaller.Sabitler.kirmiziAralik;
+import static com.yazlab.proje.sabitler_globaller.Sabitler.sariAralik;
+import static com.yazlab.proje.sabitler_globaller.Sabitler.yesilSiyahAralik;
 
 public class OyunEkrani implements Screen {
     private final Oyun oyun;
+    private float sariSure, kirmiziSure, yesilSiyahSure;
     private float spawnSuresi;
     private float spawnAraligi;
     private float gecenSure;
@@ -40,7 +45,7 @@ public class OyunEkrani implements Screen {
     private Sound patlamaSesi;
     private Texture arkaPlan;
     private Stage stage;
-    private Stage pencereStage;
+    private AcilirPencere cikisPencere;
 
     public OyunEkrani(final Oyun oyun) {
         keypressed = false;
@@ -54,7 +59,12 @@ public class OyunEkrani implements Screen {
         this.stage = new Stage(new StretchViewport(ekranGenisligi, ekranYuksekligi));
         this.spawnSuresi = 0f;
         this.spawnAraligi = 0.8f; // Balonların oluşturulma aralığı
-        this.kalanSure = 99999; // Oyun süre limiti
+
+        this.sariSure = 0f;
+        this.kirmiziSure = 0f;
+        this.yesilSiyahSure = 0f;
+
+        this.kalanSure = 30; // Oyun süre limiti
         this.gecenSure = 0f;
         this.sureAraligi = 1.0f;
         arkaPlan = new Texture("arka_kolay.png");
@@ -87,13 +97,28 @@ public class OyunEkrani implements Screen {
         sureLabel.setX(ekranGenisligi - kalanSureLabel.getWidth() / 2);
         sureLabel.setY(ekranYuksekligi - kalanSureLabel.getHeight() * 2);
 
+        // "Çıkış" penceresi
+        cikisPencere = new AcilirPencere("Oyundan çıkılsın mı?");
+        cikisPencere.button("ÇIK", new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                dispose();
+                return cikisPencere.remove();
+            }
+        });
+
+        cikisPencere.button("Devam Et", new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                durdurulduMu = false;
+                return cikisPencere.remove();
+            }
+        });
+        cikisPencere.text("\n");
         // TODO: 4.05.2016 Ses efektleri ve arkaplan müziği
         /*
-		patlamaSesi = Gdx.audio.newSound(Gdx.files.internal("patlama.mp3"));
+        patlamaSesi = Gdx.audio.newSound(Gdx.files.internal("patlama.mp3"));
 		arkaPlanMuzigi = Gdx.audio.newMusic(Gdx.files.internal("muzik.mp3"));
 		arkaPlanMuzigi.setLooping(true);
         */
-
     }
 
     @Override
@@ -101,11 +126,15 @@ public class OyunEkrani implements Screen {
         if (!durdurulduMu) {
             // TODO: 4.05.2016 Arkaplan resmi ekle
             // Arkaplan rengi
-            Gdx.gl.glClearColor(0, 0, 0, 0);
-            Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            spawnSuresi += delta;
+            //spawnSuresi += delta;
             gecenSure += delta;
+            sariSure += delta;
+            kirmiziSure += delta;
+            yesilSiyahSure += delta;
+
 
             // 'kalanSure'yi her 'sureAraligi'nda 1 azalt
             if (gecenSure > sureAraligi) {
@@ -113,12 +142,28 @@ public class OyunEkrani implements Screen {
                 gecenSure -= sureAraligi;
             }
 
+            if (sariSure > sariAralik) {
+                stage.addActor(new SariBalon());
+                sariSure -= sariAralik;
+            }
+
+            if (kirmiziSure > kirmiziAralik) {
+                stage.addActor(new KirmiziBalon());
+                kirmiziSure -= kirmiziAralik;
+            }
+
+            if (yesilSiyahSure > yesilSiyahAralik) {
+                stage.addActor(new YesilSiyahBalon());
+                yesilSiyahSure -= yesilSiyahAralik;
+            }
+
+            /*
             // Balonları ekrana ekle
             if (spawnSuresi > spawnAraligi) {
                 spawnSuresi -= spawnAraligi;
                 stage.addActor(new KirmiziBalon());
                 stage.addActor(new YesilSiyahBalon());
-            }
+            }*/
 
             sureLabel.setText(Integer.toString(kalanSure));
             puanLabel.setText(Integer.toString(puan));
@@ -154,52 +199,22 @@ public class OyunEkrani implements Screen {
             }
         }
 
-            if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
-                cikisPenceresiniGoster();
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+            durdurulduMu = true;
+            cikisPencere.show(stage);
+            stage.addActor(cikisPencere);
+            stage.draw();
         }
-
-    }
-
-    public void cikisPenceresiniGoster() {
-        durdurulduMu = true;
-        pencereStage = new Stage();
-        Gdx.input.setInputProcessor(pencereStage);
-
-        new AcilirPencere("Oyundan çıkılsın mı?")
-                .text("")
-                .button("ÇIK", new InputListener() {
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        pencereStage.dispose(); //Pencere ekranını kaldır
-                        dispose(); //Oyun ekranını kaldır
-                        return true;
-                    }
-                })
-                .button("Devam Et", new InputListener() {
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        pencereStage.dispose(); //Pencere ekranını kaldır
-                        Gdx.input.setInputProcessor(stage);
-                        durdurulduMu = false; //Oyuna devam et
-                        return true;
-                    }
-                })
-                .show(pencereStage); // actually show the dialog
-
-        pencereStage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
         stage.draw();
-
-        if(durdurulduMu){
-            pencereStage.draw();
-        }
     }
 
     @Override
     public void show() {
-
-        //// TODO: 4.05.2016 Arkaplan müziğini çal
+        // TODO: 4.05.2016 Arkaplan müziğini çal
         // Arkaplan müziği burada eklenebilir
         //arkaPlanMuzigi.play();
     }
@@ -214,7 +229,6 @@ public class OyunEkrani implements Screen {
 
     @Override
     public void resume() {
-
     }
 
     @Override

@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
 import static com.yazlab.proje.sabitler_globaller.Globaller.tema;
-import static com.yazlab.proje.sabitler_globaller.Sabitler.ekranGenisligi;
+import static com.yazlab.proje.sabitler_globaller.Sabitler.ekranYuksekligi;
 
 public class AcilirPencere extends Dialog {
 
@@ -17,12 +17,11 @@ public class AcilirPencere extends Dialog {
     }
 
     private void initialize() {
+        padTop(80);
         getTitleLabel().setAlignment(Align.center);
-        padTop(80); // set padding on top of the dialog title
-        getButtonTable().defaults().height(120); // set buttons height
-        getButtonTable().defaults().width(ekranGenisligi/2f);
+        getButtonTable().defaults().height(ekranYuksekligi / 16f);
         setModal(true);
-        setMovable(false);
+        setMovable(true);
         setResizable(false);
     }
 

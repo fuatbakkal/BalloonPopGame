@@ -15,10 +15,10 @@ import static com.yazlab.proje.sabitler_globaller.Sabitler.balonGenisligi;
 import static com.yazlab.proje.sabitler_globaller.Sabitler.balonYuksekligi;
 
 public class YesilSiyahBalon extends Actor {
-    public Texture texture;
-    public int hiz;
-    public float baslangicX;
-    public float zaman;
+    private Texture texture;
+    private int hiz;
+    private float baslangicX;
+    private float zaman;
     private float gecenSure;
     private float donusumAraligi;
     private float puanDegeri;
@@ -70,7 +70,7 @@ public class YesilSiyahBalon extends Actor {
         }
     }
 
-    public void donustur() {
+    private void donustur() {
         // Balon yeşilse siyah yap
         if(yesilMi) {
             yesilMi = false;
@@ -83,7 +83,6 @@ public class YesilSiyahBalon extends Actor {
             yesilMi = true;
             texture = new Texture("yesil_balon.png");
             puanDegeri = 5;
-
         }
     }
 }
