@@ -115,6 +115,7 @@ public class OyunEkrani implements Screen {
         cikisPencere.button("ÇIK", new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
+                oyun.setScreen(new MenuEkrani(oyun));
                 return cikisPencere.remove();
             }
         });
@@ -189,14 +190,14 @@ public class OyunEkrani implements Screen {
                 // Oyun tamamlandıysa
                 if (seviye == 3) {
                     dosya.writeString(toplamPuan + "\n", true); //Oyun sonu skoru dosyaya yaz
-                    OyunTamamlandi tamamlandiPencere = new OyunTamamlandi(stage, oyun);
+                    OyunTamamlandi tamamlandiPencere = new OyunTamamlandi(oyun, this);
                     tamamlandiPencere.show(stage);
                     stage.addActor(tamamlandiPencere);
                 }
 
                 // Sadece bölüm tamamlandıysa
                 else {
-                    BolumTamamlandi tamamlandiPencere = new BolumTamamlandi(stage, oyun);
+                    BolumTamamlandi tamamlandiPencere = new BolumTamamlandi(oyun, this);
                     tamamlandiPencere.show(stage);
                     stage.addActor(tamamlandiPencere);
                 }
@@ -204,7 +205,7 @@ public class OyunEkrani implements Screen {
 
             // Bölüm geçme koşulu sağlanmazsa
             else {
-                OyunBitti bitisPencere = new OyunBitti(stage, oyun);
+                OyunBitti bitisPencere = new OyunBitti(oyun, this);
                 bitisPencere.show(stage);
                 stage.addActor(bitisPencere);
             }
@@ -248,6 +249,5 @@ public class OyunEkrani implements Screen {
     public void dispose() {
         arkaPlanSesi.dispose();
         stage.dispose();
-        oyun.setScreen(new MenuEkrani(oyun));
     }
 }
