@@ -10,15 +10,24 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.yazlab.proje.arkaplanlar.ArkaMenu;
+import com.yazlab.proje.pencereler.Pencere;
 
+import java.io.BufferedReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static com.yazlab.proje.sabitler_globaller.Globaller.dosya;
+import static com.yazlab.proje.sabitler_globaller.Globaller.seviye;
 import static com.yazlab.proje.sabitler_globaller.Globaller.tema;
+import static com.yazlab.proje.sabitler_globaller.Globaller.toplamPuan;
 import static com.yazlab.proje.sabitler_globaller.Sabitler.ekranGenisligi;
 import static com.yazlab.proje.sabitler_globaller.Sabitler.ekranYuksekligi;
 
 public class MenuEkrani implements Screen {
     private final Oyun oyun;
     private Stage stage;
-    private AcilirPencere hakkindaPencere;
+    private Pencere hakkindaPencere, yuksekSkorlarPencere;
 
     public MenuEkrani(final Oyun oyun) {
         this.oyun = oyun;
@@ -54,8 +63,10 @@ public class MenuEkrani implements Screen {
         yeniOyunButon.setHeight(BUTON_YUKSEKLIGI);
         yeniOyunButon.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                oyun.setScreen(new OyunEkrani(oyun));
+                seviye = 1;
+                toplamPuan = 0;
                 dispose();
+                oyun.setScreen(new OyunEkrani(oyun, seviye));
                 return true;
             }
         });
@@ -68,10 +79,52 @@ public class MenuEkrani implements Screen {
         yuksekSkorlarButon.setHeight(BUTON_YUKSEKLIGI);
         yuksekSkorlarButon.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                dispose();
+                yuksekSkorlarPencere.show(stage);
+                stage.addActor(yuksekSkorlarPencere);
                 return true;
             }
         });
+
+        // "Yüksek Skorlar" penceresi
+        yuksekSkorlarPencere = new Pencere("Yüksek Skorlar");
+        yuksekSkorlarPencere.button("Tamam", new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return yuksekSkorlarPencere.remove();
+            }
+        });
+
+        // Skorlar dosyası var ise
+        if (dosya.exists()) {
+            // Skorları dosyadan oku
+            BufferedReader reader = new BufferedReader(dosya.reader());
+            List<Integer> skorlar = new ArrayList<Integer>();
+
+            try {
+                String satir = reader.readLine();
+                while (satir != null) {
+                    skorlar.add(Integer.parseInt(satir));
+                    satir = reader.readLine();
+                }
+            } catch (Exception e) {
+                yuksekSkorlarPencere.text(e.getMessage());
+            }
+
+            // Skorları büyükten küçüğe doğru sırala
+            Collections.sort(skorlar);
+            Collections.reverse(skorlar);
+
+            // Skorları pencere içine yaz
+            for (int i = 0; i < skorlar.size(); i++) {
+                yuksekSkorlarPencere.getContentTable().row();
+                yuksekSkorlarPencere.getContentTable().add((i + 1) + ". " + skorlar.get(i));
+            }
+        }
+
+        // Skorlar dosyası yok ise
+        else {
+            yuksekSkorlarPencere.text("Skorlar dosyası boş!");
+        }
+
 
         // "Hakkında" butonu
         TextButton hakkindaButon = new TextButton("Hakkında", tema);
@@ -88,7 +141,7 @@ public class MenuEkrani implements Screen {
         });
 
         // "Hakkında" penceresi
-        hakkindaPencere = new AcilirPencere("Hakkında");
+        hakkindaPencere = new Pencere("Hakkında");
         hakkindaPencere.getContentTable().add("Yazılım Laboratuvarı II - 2. Proje\n").colspan(2);
         hakkindaPencere.getContentTable().row();
         hakkindaPencere.getContentTable().add("130202087");
@@ -129,6 +182,7 @@ public class MenuEkrani implements Screen {
         stage.addActor(yuksekSkorlarButon);
         stage.addActor(hakkindaButon);
         stage.addActor(cikisButon);
+        stage.addActor(new SesAcKapat());
     }
 
     @Override
@@ -154,6 +208,5 @@ public class MenuEkrani implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        oyun.dispose();
     }
 }

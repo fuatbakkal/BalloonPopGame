@@ -8,8 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 
+import static com.yazlab.proje.sabitler_globaller.Globaller.bolumPuani;
+import static com.yazlab.proje.sabitler_globaller.Globaller.patlamaSesi;
 import static com.yazlab.proje.sabitler_globaller.Globaller.patlatilanSari;
-import static com.yazlab.proje.sabitler_globaller.Globaller.puan;
+import static com.yazlab.proje.sabitler_globaller.Globaller.sesAcik;
 import static com.yazlab.proje.sabitler_globaller.Sabitler.balonGenisligi;
 import static com.yazlab.proje.sabitler_globaller.Sabitler.balonYuksekligi;
 import static com.yazlab.proje.sabitler_globaller.Sabitler.ekranGenisligi;
@@ -32,11 +34,14 @@ public class SariBalon extends Actor {
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
         setTouchable(Touchable.enabled);
 
-        // Balon patlatılırsa ekrandan kaldır ve puan ekle
+        // Balon patlatılırsa ekrandan kaldır ve bolumPuani ekle
         addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                puan += 20;
+                bolumPuani += 20;
                 patlatilanSari++;
+                if (sesAcik) {
+                    patlamaSesi.play();
+                }
                 return remove();
             }
         });
@@ -50,6 +55,7 @@ public class SariBalon extends Actor {
         super.act(delta);
         zaman += delta;
 
+        // 1 saniye sonra balonu kaldır
         if (zaman > 1f) {
             remove();
         }

@@ -8,15 +8,18 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 
+import static com.yazlab.proje.sabitler_globaller.Globaller.bolumPuani;
+import static com.yazlab.proje.sabitler_globaller.Globaller.patlamaSesi;
 import static com.yazlab.proje.sabitler_globaller.Globaller.patlatilanSiyah;
 import static com.yazlab.proje.sabitler_globaller.Globaller.patlatilanYesil;
-import static com.yazlab.proje.sabitler_globaller.Globaller.puan;
+import static com.yazlab.proje.sabitler_globaller.Globaller.sesAcik;
+import static com.yazlab.proje.sabitler_globaller.Globaller.zorluk;
 import static com.yazlab.proje.sabitler_globaller.Sabitler.balonGenisligi;
 import static com.yazlab.proje.sabitler_globaller.Sabitler.balonYuksekligi;
 
 public class YesilSiyahBalon extends Actor {
     private Texture texture;
-    private int hiz;
+    private float hiz;
     private float baslangicX;
     private float zaman;
     private float gecenSure;
@@ -29,23 +32,27 @@ public class YesilSiyahBalon extends Actor {
         yesilMi = MathUtils.randomBoolean(); //Yeşil ya da Siyah balon
         donustur();
         zaman = 0;
-        hiz = 700;
+        hiz = 700 * zorluk;
         baslangicX = MathUtils.random(-0.05f, 3.85f);
         setX(baslangicX * balonGenisligi);
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
         gecenSure = 0f;
-        donusumAraligi = MathUtils.random(0.5f, 2.0f);
+        donusumAraligi = MathUtils.random(0.5f, 2.0f) / zorluk;
         setTouchable(Touchable.enabled); //Dokunmayı etkinleştir
 
-        // Balon patlatılırsa ekrandan kaldır ve puan ekle
+        // Balon patlatılırsa ekrandan kaldır ve bolumPuani ekle
         addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                puan += puanDegeri;
+                bolumPuani += puanDegeri;
 
                 if(yesilMi)
                     patlatilanYesil++;
                 else
                     patlatilanSiyah++;
+
+                if (sesAcik) {
+                    patlamaSesi.play();
+                }
 
                 return remove();
             }

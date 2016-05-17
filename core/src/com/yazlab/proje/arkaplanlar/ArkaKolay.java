@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 
-public final class ArkaMenu extends Actor {
+public final class ArkaKolay extends Actor {
     public Texture texture;
 
-    public ArkaMenu() {
+    public ArkaKolay() {
         super();
-        texture = new Texture("arka_menu.png");
+        texture = new Texture("arka_kolay.png");
         setTouchable(Touchable.disabled);
     }
 

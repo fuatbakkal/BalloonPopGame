@@ -1,4 +1,4 @@
-package com.yazlab.proje;
+package com.yazlab.proje.pencereler;
 
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -9,9 +9,10 @@ import com.badlogic.gdx.utils.Align;
 import static com.yazlab.proje.sabitler_globaller.Globaller.tema;
 import static com.yazlab.proje.sabitler_globaller.Sabitler.ekranYuksekligi;
 
-public class AcilirPencere extends Dialog {
+/* Oyundaki bütün açılır pencerelerin üst sınıfı */
+public class Pencere extends Dialog {
 
-    public AcilirPencere(String title) {
+    public Pencere(String title) {
         super(title, tema);
         initialize();
     }
@@ -21,17 +22,17 @@ public class AcilirPencere extends Dialog {
         getTitleLabel().setAlignment(Align.center);
         getButtonTable().defaults().height(ekranYuksekligi / 16f);
         setModal(true);
-        setMovable(true);
+        setMovable(false);
         setResizable(false);
     }
 
     @Override
-    public AcilirPencere text(String text) {
+    public Pencere text(String text) {
         super.text(new Label(text, tema));
         return this;
     }
 
-    public AcilirPencere button(String buttonText, InputListener listener) {
+    public Pencere button(String buttonText, InputListener listener) {
         TextButton button = new TextButton(buttonText, tema);
         button.addListener(listener);
         button(button);
